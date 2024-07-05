@@ -6,6 +6,9 @@ import plotly.express as px
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
 from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import pickle
 
 base_census = pd.read_csv('census.csv')
 print(base_census)
@@ -40,9 +43,32 @@ x_census[:, 8] = label_encoder_race.fit_transform(x_census[:, 8])
 x_census[:, 9] = label_encoder_sex.fit_transform(x_census[:, 9])
 x_census[:, 13] = label_encoder_country.fit_transform(x_census[:, 13])
 
-print(x_census)
+#print(f'Aqui: {x_census}')
 
 oneHotEncoder_census = ColumnTransformer(transformers=[('OneHot', OneHotEncoder(), [1,3,5,6,7,8,9,13])], remainder='passthrough')
 x_census = oneHotEncoder_census.fit_transform(x_census).toarray()
 
-print(x_census[0])
+#print(f'Aqui: {x_census.shape}')
+#print(x_census.shape)
+
+
+scaler_census = StandardScaler()
+x_census = scaler_census.fit_transform(x_census)
+print(f'Aqui: {x_census}')
+#print(x_census.shape)
+
+# Base de Treinamento de dados
+# importamos o from sklearn.model_selection import train_test_split
+#Crição de 4 váriasveis
+#Sem o random_state sempre vai mudar os resultados
+x_census_treinamneto, x_census_teste, y_census_treinamento, y_census_teste = train_test_split(x_census, y_census, test_size = 0.25, random_state=0)
+
+print(x_census_treinamneto.shape)
+print(y_census_treinamento.shape)
+
+print(x_census_teste.shape)
+print(y_census_teste.shape)
+
+with open ('census.pkl', mode = 'wb') as f:
+    pickle.dump([x_census_treinamneto, y_census_treinamento, x_census_teste, y_census_teste])
+    

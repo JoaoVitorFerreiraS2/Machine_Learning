@@ -4,6 +4,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import pickle
 
 # Vamos trabalhar com duas base dados
 
@@ -123,7 +125,24 @@ print(x_credit[:,0].min())
 print(x_credit[:,1].max())
 #=======================================================================#
 
-# Base de dados do censo
+# Base de Treinamento de dados
+#=======================================================================#
+# importamos o from sklearn.model_selection import train_test_split
+#Crição de 4 váriasveis
+#Sem o random_state sempre vai mudar os resultados
+x_credit_treinamento, x_credit_teste, y_credit_treinamento, y_credit_teste = train_test_split(x_credit, y_credit, test_size=0.25, random_state=0)
+print(x_credit_treinamento.shape)
+print(y_credit_treinamento.shape)
+
+print(x_credit_teste)
+print(x_credit_teste)
 #=======================================================================#
 
+# Salvar as bases de dados
+#=======================================================================#
+#Usaremos a biblioteca pickle que é utilizado para salvar váriaveis em disco
+# with open('<nome do arquivo.pkl>, mode = '<como quer salvar>') as f:
+#obs: pkl é a extensão para a biblioteca | mode = signfica como a gente quer salvar, .dump = para salvar em lista
+with open('credit.pkl', mode = 'wb') as f:
+    pickle.dump([x_credit_treinamento, y_credit_treinamento, x_credit_teste, y_credit_teste])
 #=======================================================================#
